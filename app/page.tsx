@@ -10,6 +10,8 @@ type Project = {
   title: string;
   category: string;
   year: string;
+  mode: "music-video" | "tvc";
+  aspectRatio: number;
   phi: number;
   theta: number;
   thumbnail: string;
@@ -31,48 +33,30 @@ type HintSeed = {
   theta: number;
 };
 
-type ProjectSeed = Omit<Project, "phi" | "theta">;
+type ProjectSeed = Omit<Project, "phi" | "theta" | "aspectRatio">;
 
 const projectSeeds: ProjectSeed[] = [
-  { id: "01", letter: "a", title: "Archive A", category: "Brand Film", year: "2025", thumbnail: workImagePath(1), fallbackThumbnail: createThumbnail(1, "#e7eef6", "#8ea3bd", "#32465e") },
-  { id: "02", letter: "b", title: "Archive B", category: "Campaign", year: "2024", thumbnail: workImagePath(2), fallbackThumbnail: createThumbnail(2, "#e8edf5", "#a5b5ca", "#41506a") },
-  { id: "03", letter: "c", title: "Archive C", category: "Motion Identity", year: "2025", thumbnail: workImagePath(3), fallbackThumbnail: createThumbnail(3, "#eef2f7", "#95a8c2", "#2f435d") },
-  { id: "04", letter: "d", title: "Archive D", category: "Installation", year: "2023", thumbnail: workImagePath(4), fallbackThumbnail: createThumbnail(4, "#e3ebf4", "#aab8ca", "#43516a") },
-  { id: "05", letter: "e", title: "Archive E", category: "Interactive Film", year: "2026", thumbnail: workImagePath(5), fallbackThumbnail: createThumbnail(5, "#ecf1f6", "#8fa5bf", "#324962") },
-  { id: "06", letter: "f", title: "Archive F", category: "Visual System", year: "2024", thumbnail: workImagePath(6), fallbackThumbnail: createThumbnail(6, "#e6edf5", "#9fb0c6", "#40516a") },
-  { id: "07", letter: "g", title: "Archive G", category: "Spatial Visual", year: "2025", thumbnail: workImagePath(7), fallbackThumbnail: createThumbnail(7, "#eef3f8", "#92a4bc", "#31445d") },
-  { id: "08", letter: "h", title: "Archive H", category: "Direction", year: "2023", thumbnail: workImagePath(8), fallbackThumbnail: createThumbnail(8, "#e5ecf4", "#abb8ca", "#435068") },
-  { id: "09", letter: "i", title: "Archive I", category: "Short Form", year: "2026", thumbnail: workImagePath(9), fallbackThumbnail: createThumbnail(9, "#e9eef5", "#9caec4", "#364860") },
-  { id: "10", letter: "j", title: "Archive J", category: "Sound Motion", year: "2024", thumbnail: workImagePath(10), fallbackThumbnail: createThumbnail(10, "#edf2f7", "#93a6bf", "#31465d") },
-  { id: "11", letter: "k", title: "Archive K", category: "Graphic System", year: "2025", thumbnail: workImagePath(11), fallbackThumbnail: createThumbnail(11, "#e6edf6", "#a2b2c8", "#425168") },
-  { id: "12", letter: "l", title: "Archive L", category: "Editorial Motion", year: "2024", thumbnail: workImagePath(12), fallbackThumbnail: createThumbnail(12, "#ebf1f7", "#8ea4be", "#2f455f") },
-  { id: "13", letter: "m", title: "Archive M", category: "Launch Visual", year: "2026", thumbnail: workImagePath(13), fallbackThumbnail: createThumbnail(13, "#e4ebf3", "#aab8cb", "#46556c") },
-  { id: "14", letter: "n", title: "Archive N", category: "Brand Motion", year: "2025", thumbnail: workImagePath(14), fallbackThumbnail: createThumbnail(14, "#edf2f8", "#97aac2", "#344961") },
-  { id: "15", letter: "o", title: "Archive O", category: "Film Title", year: "2023", thumbnail: workImagePath(15), fallbackThumbnail: createThumbnail(15, "#e7eef5", "#a0afc3", "#40526c") },
-  { id: "16", letter: "p", title: "Archive P", category: "Screen Visual", year: "2025", thumbnail: workImagePath(16), fallbackThumbnail: createThumbnail(16, "#edf3f8", "#91a5bd", "#33475f") },
-  { id: "17", letter: "q", title: "Archive Q", category: "Spatial Media", year: "2026", thumbnail: workImagePath(17), fallbackThumbnail: createThumbnail(17, "#e3ebf4", "#a8b7ca", "#44536c") },
-  { id: "18", letter: "r", title: "Archive R", category: "Identity Film", year: "2024", thumbnail: workImagePath(18), fallbackThumbnail: createThumbnail(18, "#e8eef6", "#96a9c1", "#36485f") },
-  { id: "19", letter: "s", title: "Archive S", category: "Visual Direction", year: "2025", thumbnail: workImagePath(19), fallbackThumbnail: createThumbnail(19, "#eef3f8", "#9fafc4", "#3c4d66") },
-  { id: "20", letter: "t", title: "Archive T", category: "Experimental Motion", year: "2026", thumbnail: workImagePath(20), fallbackThumbnail: createThumbnail(20, "#e5ecf5", "#8da2bc", "#30445d") }
+  { id: "01", letter: "a", title: "Archive A", category: "Brand Film", year: "2025", mode: "music-video", thumbnail: workImagePath(1), fallbackThumbnail: createThumbnail(1, "#e7eef6", "#8ea3bd", "#32465e") },
+  { id: "02", letter: "b", title: "Archive B", category: "Campaign", year: "2024", mode: "music-video", thumbnail: workImagePath(2), fallbackThumbnail: createThumbnail(2, "#e8edf5", "#a5b5ca", "#41506a") },
+  { id: "03", letter: "c", title: "Archive C", category: "Motion Identity", year: "2025", mode: "music-video", thumbnail: workImagePath(3), fallbackThumbnail: createThumbnail(3, "#eef2f7", "#95a8c2", "#2f435d") },
+  { id: "04", letter: "d", title: "Archive D", category: "Installation", year: "2023", mode: "music-video", thumbnail: workImagePath(4), fallbackThumbnail: createThumbnail(4, "#e3ebf4", "#aab8ca", "#43516a") },
+  { id: "05", letter: "e", title: "Archive E", category: "Interactive Film", year: "2026", mode: "music-video", thumbnail: workImagePath(5), fallbackThumbnail: createThumbnail(5, "#ecf1f6", "#8fa5bf", "#324962") },
+  { id: "06", letter: "f", title: "Archive F", category: "Visual System", year: "2024", mode: "music-video", thumbnail: workImagePath(6), fallbackThumbnail: createThumbnail(6, "#e6edf5", "#9fb0c6", "#40516a") },
+  { id: "07", letter: "g", title: "Archive G", category: "Spatial Visual", year: "2025", mode: "music-video", thumbnail: workImagePath(7), fallbackThumbnail: createThumbnail(7, "#eef3f8", "#92a4bc", "#31445d") },
+  { id: "08", letter: "h", title: "Archive H", category: "Direction", year: "2023", mode: "music-video", thumbnail: workImagePath(1), fallbackThumbnail: createThumbnail(8, "#e5ecf4", "#abb8ca", "#435068") },
+  { id: "09", letter: "i", title: "Archive I", category: "Short Form", year: "2026", mode: "music-video", thumbnail: workImagePath(2), fallbackThumbnail: createThumbnail(9, "#e9eef5", "#9caec4", "#364860") },
+  { id: "10", letter: "j", title: "Archive J", category: "Sound Motion", year: "2024", mode: "music-video", thumbnail: workImagePath(3), fallbackThumbnail: createThumbnail(10, "#edf2f7", "#93a6bf", "#31465d") },
+  { id: "11", letter: "k", title: "Archive K", category: "Graphic System", year: "2025", mode: "tvc", thumbnail: workImagePath(4), fallbackThumbnail: createThumbnail(11, "#20242b", "#3a4657", "#e7edf5") },
+  { id: "12", letter: "l", title: "Archive L", category: "Editorial Motion", year: "2024", mode: "tvc", thumbnail: workImagePath(5), fallbackThumbnail: createThumbnail(12, "#1d2129", "#465263", "#eef4fb") },
+  { id: "13", letter: "m", title: "Archive M", category: "Launch Visual", year: "2026", mode: "tvc", thumbnail: workImagePath(6), fallbackThumbnail: createThumbnail(13, "#21262e", "#4c596b", "#eff4fa") },
+  { id: "14", letter: "n", title: "Archive N", category: "Brand Motion", year: "2025", mode: "tvc", thumbnail: workImagePath(7), fallbackThumbnail: createThumbnail(14, "#1f242c", "#455266", "#edf3fb") },
+  { id: "15", letter: "o", title: "Archive O", category: "Film Title", year: "2023", mode: "tvc", thumbnail: workImagePath(1), fallbackThumbnail: createThumbnail(15, "#1c2027", "#3b4758", "#ecf2f9") },
+  { id: "16", letter: "p", title: "Archive P", category: "Screen Visual", year: "2025", mode: "tvc", thumbnail: workImagePath(2), fallbackThumbnail: createThumbnail(16, "#21252d", "#4a5666", "#eef4fb") },
+  { id: "17", letter: "q", title: "Archive Q", category: "Spatial Media", year: "2026", mode: "tvc", thumbnail: workImagePath(3), fallbackThumbnail: createThumbnail(17, "#1d2129", "#455162", "#e8eef6") },
+  { id: "18", letter: "r", title: "Archive R", category: "Identity Film", year: "2024", mode: "tvc", thumbnail: workImagePath(4), fallbackThumbnail: createThumbnail(18, "#20242c", "#404d5d", "#eff4fa") },
+  { id: "19", letter: "s", title: "Archive S", category: "Visual Direction", year: "2025", mode: "tvc", thumbnail: workImagePath(5), fallbackThumbnail: createThumbnail(19, "#1f232a", "#4c5869", "#eef3fb") },
+  { id: "20", letter: "t", title: "Archive T", category: "Experimental Motion", year: "2026", mode: "tvc", thumbnail: workImagePath(6), fallbackThumbnail: createThumbnail(20, "#1c2027", "#3d4857", "#ecf2f8") }
 ];
-
-const projects: Project[] = projectSeeds.map((project, index, list) => {
-  const goldenAngle = Math.PI * (3 - Math.sqrt(5));
-  const normalized = (index + 0.5) / list.length;
-  const y = 1 - normalized * 2;
-  const radius = Math.sqrt(1 - y * y);
-  const theta = (index * goldenAngle + 0.45) % (Math.PI * 2);
-  const x = Math.cos(theta) * radius;
-  const z = Math.sin(theta) * radius;
-  const phi = Math.acos(Math.max(-1, Math.min(1, y)));
-  const azimuth = Math.atan2(z, x);
-
-  return {
-    ...project,
-    phi,
-    theta: azimuth
-  };
-});
 
 const AUTO_ROTATE_Y = 0.0025;
 const GLOBE_RADIUS = 280;
@@ -142,6 +126,8 @@ function hintPoint(seed: HintSeed, rotateX: number, rotateY: number) {
       title: "",
       category: "",
       year: "",
+      mode: "music-video",
+      aspectRatio: 1,
       phi: seed.phi,
       theta: seed.theta,
       thumbnail: "",
@@ -204,6 +190,7 @@ function projectPoint(project: Project, rotateX: number, rotateY: number): Globe
 }
 
 export default function Home() {
+  const [activeMode, setActiveMode] = useState<"music-video" | "tvc">("music-video");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
   const [rotation, setRotation] = useState(INITIAL_ROTATION);
@@ -225,6 +212,11 @@ export default function Home() {
   useEffect(() => {
     hoveredProjectIdRef.current = hoveredProjectId;
   }, [hoveredProjectId]);
+
+  useEffect(() => {
+    setHoveredProjectId(null);
+    setSelectedProject(null);
+  }, [activeMode]);
 
   useEffect(() => {
     let frameId = 0;
@@ -339,9 +331,32 @@ export default function Home() {
     };
   }, [isDragging]);
 
+  const visibleProjects = useMemo(() => {
+    const scopedProjects = projectSeeds.filter((project) => project.mode === activeMode);
+
+    return scopedProjects.map((project, index, list) => {
+      const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+      const normalized = (index + 0.5) / list.length;
+      const y = 1 - normalized * 2;
+      const radius = Math.sqrt(1 - y * y);
+      const theta = (index * goldenAngle + 0.45) % (Math.PI * 2);
+      const x = Math.cos(theta) * radius;
+      const z = Math.sin(theta) * radius;
+      const phi = Math.acos(Math.max(-1, Math.min(1, y)));
+      const azimuth = Math.atan2(z, x);
+
+      return {
+        ...project,
+        aspectRatio: index % 5 === 1 || index % 5 === 4 ? 3 / 4 : 4 / 3,
+        phi,
+        theta: azimuth
+      };
+    });
+  }, [activeMode]);
+
   const globePoints = useMemo(
     () => {
-      return projects
+      return visibleProjects
         .map((project) => projectPoint(project, rotation.x, rotation.y))
         .map((point) => {
           const distanceFromCenter = Math.hypot(point.x, point.y);
@@ -357,15 +372,15 @@ export default function Home() {
         })
         .sort((a, b) => a.z - b.z);
     },
-    [rotation.x, rotation.y]
+    [rotation.x, rotation.y, visibleProjects]
   );
 
   const globeLinks = useMemo(() => {
     const pointById = new Map(globePoints.map((point) => [point.project.id, point]));
 
-    return projects.slice(0, -1).flatMap((project, index) => {
+    return visibleProjects.slice(0, -1).flatMap((project, index) => {
       const from = pointById.get(project.id);
-      const to = pointById.get(projects[index + 1].id);
+      const to = pointById.get(visibleProjects[index + 1].id);
 
       if (!from || !to) {
         return [];
@@ -384,7 +399,7 @@ export default function Home() {
         }
       ];
     });
-  }, [globePoints]);
+  }, [globePoints, visibleProjects]);
 
   const frontmostProjectId = useMemo(() => {
     return globePoints.reduce<string | null>((closestId, point) => {
@@ -405,12 +420,12 @@ export default function Home() {
   const loopedProjects = useMemo(
     () =>
       Array.from({ length: LIST_LOOP_COPIES }, (_, copyIndex) =>
-        projects.map((project) => ({
+        visibleProjects.map((project) => ({
           copyIndex,
           project
         }))
       ).flat(),
-    []
+    [visibleProjects]
   );
 
   const hintPoints = useMemo(
@@ -451,7 +466,7 @@ export default function Home() {
   };
 
   return (
-    <main className="page-shell">
+    <main className={`page-shell theme-${activeMode}`}>
       <div className="ambient-wash" aria-hidden="true" />
 
       <section className="stage">
@@ -542,19 +557,19 @@ export default function Home() {
                       "--node-x": `${point.x.toFixed(2)}px`,
                       "--node-y": `${point.y.toFixed(2)}px`,
                       "--node-scale": point.scale.toFixed(3),
-                  "--node-opacity": point.opacity.toFixed(3),
-                  "--node-width": `${(38 + point.scale * 64).toFixed(2)}px`,
-                  "--node-height": `${((38 + point.scale * 64) * 0.75).toFixed(2)}px`,
-                  "--node-blur": `${point.project.id === frontmostProjectId ? 0 : Math.max(0, 3.8 - point.scale * 2.4).toFixed(2)}px`,
-                  "--node-saturation": `${Math.max(0.22, 0.3 + point.scale * 0.62).toFixed(3)}`
-                } as CSSProperties
-              }
-              onClick={() => {
-                if (dragRef.current.moved) {
-                  dragRef.current.moved = false;
-                  return;
-                }
-                setSelectedProject(point.project);
+                      "--node-opacity": point.opacity.toFixed(3),
+                      "--node-width": `${(38 + point.scale * 64).toFixed(2)}px`,
+                      "--node-height": `${((38 + point.scale * 64) / point.project.aspectRatio).toFixed(2)}px`,
+                      "--node-blur": `${point.project.id === frontmostProjectId ? 0 : Math.max(0, 3.8 - point.scale * 2.4).toFixed(2)}px`,
+                      "--node-saturation": `${Math.max(0.22, 0.3 + point.scale * 0.62).toFixed(3)}`
+                    } as CSSProperties
+                  }
+                  onClick={() => {
+                    if (dragRef.current.moved) {
+                      dragRef.current.moved = false;
+                      return;
+                    }
+                    setSelectedProject(point.project);
                   }}
                   onPointerEnter={() => handleProjectHover(point.project)}
                   onPointerLeave={clearProjectHover}
@@ -582,6 +597,25 @@ export default function Home() {
               ))}
             </div>
           </div>
+
+          <aside className="mode-rail" aria-label="Project type mirror">
+            <div className="mode-nav mode-nav-right">
+              <button
+                type="button"
+                className={`mode-item ${activeMode === "music-video" ? "is-active" : ""}`}
+                onClick={() => setActiveMode("music-video")}
+              >
+                MV
+              </button>
+              <button
+                type="button"
+                className={`mode-item ${activeMode === "tvc" ? "is-active" : ""}`}
+                onClick={() => setActiveMode("tvc")}
+              >
+                TVC
+              </button>
+            </div>
+          </aside>
         </div>
 
         <footer className="site-meta" aria-label="Studio information">

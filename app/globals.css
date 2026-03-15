@@ -2,6 +2,20 @@
   --bg: #f3f5f8;
   --fg: #070707;
   --muted: rgba(7, 7, 7, 0.45);
+  --panel: rgba(255, 255, 255, 0.38);
+  --line: rgba(7, 7, 7, 0.05);
+  --node-surface: #d7dde6;
+  --node-inset: rgba(255, 255, 255, 0.28);
+}
+
+.theme-tvc {
+  --bg: #101215;
+  --fg: #f2f5f8;
+  --muted: rgba(242, 245, 248, 0.48);
+  --panel: rgba(255, 255, 255, 0.06);
+  --line: rgba(255, 255, 255, 0.08);
+  --node-surface: #1b1f25;
+  --node-inset: rgba(255, 255, 255, 0.08);
 }
 
 * {
@@ -44,6 +58,8 @@ nextjs-portal {
   position: relative;
   overflow: hidden;
   min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
 }
 
 .ambient-wash {
@@ -54,6 +70,13 @@ nextjs-portal {
     radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.48) 0%, transparent 26%),
     radial-gradient(circle at 82% 18%, rgba(233, 238, 245, 0.46) 0%, transparent 24%);
   pointer-events: none;
+}
+
+.theme-tvc .ambient-wash {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06) 0%, transparent 32%),
+    radial-gradient(circle at 18% 18%, rgba(115, 126, 145, 0.08) 0%, transparent 24%),
+    radial-gradient(circle at 82% 16%, rgba(88, 99, 116, 0.1) 0%, transparent 22%);
 }
 
 .stage {
@@ -75,6 +98,10 @@ nextjs-portal {
   letter-spacing: 0.02em;
   color: rgba(7, 7, 7, 0.58);
   pointer-events: none;
+}
+
+.theme-tvc .site-meta {
+  color: rgba(242, 245, 248, 0.56);
 }
 
 .site-meta p {
@@ -101,9 +128,9 @@ nextjs-portal {
 
 .stage-layout {
   display: grid;
-  grid-template-columns: minmax(220px, 24vw) 1fr;
+  grid-template-columns: minmax(220px, 24vw) minmax(520px, 1fr) minmax(220px, 24vw);
   min-height: 100vh;
-  padding: 0 3vw 0 2.4vw;
+  padding: 0 2.8vw;
 }
 
 .work-list {
@@ -111,8 +138,55 @@ nextjs-portal {
   z-index: 6;
   display: flex;
   align-items: center;
-  padding-left: clamp(18px, 3vw, 52px);
+  justify-content: flex-end;
+  padding-right: clamp(28px, 4vw, 72px);
   min-height: 100vh;
+}
+
+.mode-rail {
+  position: relative;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: clamp(28px, 4vw, 72px);
+  min-height: 100vh;
+}
+
+.mode-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mode-nav-right {
+  align-items: flex-end;
+  width: min(100%, 280px);
+}
+
+.mode-item {
+  color: rgba(7, 7, 7, 0.34);
+  font-size: 0.94rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.theme-tvc .mode-item {
+  color: rgba(242, 245, 248, 0.34);
+}
+
+.mode-item.is-active,
+.mode-item:hover,
+.mode-item:focus-visible {
+  color: var(--fg);
+  transform: translateX(3px);
+}
+
+.mode-nav-right .mode-item.is-active,
+.mode-nav-right .mode-item:hover,
+.mode-nav-right .mode-item:focus-visible {
+  transform: translateX(-3px);
 }
 
 .work-list-inner {
@@ -140,6 +214,23 @@ nextjs-portal {
   );
 }
 
+.theme-tvc .work-list-inner {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 1) 18%,
+    rgba(255, 255, 255, 1) 82%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 1) 18%,
+    rgba(255, 255, 255, 1) 82%,
+    transparent 100%
+  );
+}
+
 .work-list-inner::-webkit-scrollbar {
   display: none;
 }
@@ -156,10 +247,14 @@ nextjs-portal {
   transition: color 180ms ease, transform 180ms ease;
 }
 
+.theme-tvc .work-item {
+  color: rgba(242, 245, 248, 0.42);
+}
+
 .work-item:hover,
 .work-item:focus-visible,
 .work-item.is-active {
-  color: rgba(7, 7, 7, 0.92);
+  color: var(--fg);
   transform: translateX(4px);
 }
 
@@ -176,8 +271,7 @@ nextjs-portal {
 .stage-visual {
   position: relative;
   min-height: 100vh;
-  padding-left: clamp(20px, 3vw, 48px);
-  padding-right: clamp(12px, 3vw, 40px);
+  padding: 0;
 }
 
 .center-mark {
@@ -185,7 +279,7 @@ nextjs-portal {
   left: 50%;
   top: 50%;
   z-index: 3;
-  transform: translate(calc(-50% - 8vw), -50%);
+  transform: translate(-50%, -50%);
   mix-blend-mode: exclusion;
   pointer-events: none;
 }
@@ -207,7 +301,6 @@ nextjs-portal {
   height: 100vh;
   cursor: grab;
   touch-action: none;
-  transform: translateX(-8vw);
 }
 
 .globe-scene.is-dragging {
@@ -226,6 +319,10 @@ nextjs-portal {
   opacity: 0.45;
 }
 
+.theme-tvc .globe-guide {
+  border-color: var(--line);
+}
+
 .globe-links {
   position: absolute;
   inset: 0;
@@ -242,6 +339,10 @@ nextjs-portal {
   transform: translate3d(var(--link-x), var(--link-y), 0) rotate(var(--link-angle));
   transform-origin: 0 50%;
   background: rgba(7, 7, 7, 0.05);
+}
+
+.theme-tvc .globe-link {
+  background: var(--line);
 }
 
 .globe-hints {
@@ -263,6 +364,10 @@ nextjs-portal {
   border: 0;
   background: radial-gradient(circle at 40% 36%, rgba(255, 255, 255, 0.82) 0%, rgba(235, 240, 246, 0.38) 58%, rgba(220, 227, 236, 0.08) 100%);
   filter: blur(var(--hint-blur));
+}
+
+.theme-tvc .globe-hint {
+  background: radial-gradient(circle at 40% 36%, rgba(255, 255, 255, 0.2) 0%, rgba(135, 150, 170, 0.12) 58%, rgba(135, 150, 170, 0.03) 100%);
 }
 
 .globe-node {
@@ -312,8 +417,8 @@ nextjs-portal {
   height: 100%;
   border-radius: 0;
   overflow: hidden;
-  background-color: #d7dde6;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+  background-color: var(--node-surface);
+  box-shadow: inset 0 0 0 1px var(--node-inset);
   transition: transform 180ms ease;
 }
 
@@ -339,6 +444,12 @@ nextjs-portal {
     radial-gradient(circle at 74% 78%, rgba(7, 7, 7, 0.16) 0%, transparent 52%);
 }
 
+.theme-tvc .node-vignette {
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.18) 0%, transparent 38%),
+    radial-gradient(circle at 74% 78%, rgba(0, 0, 0, 0.36) 0%, transparent 52%);
+}
+
 .globe-node[data-depth="rear"] .node-surface {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
 }
@@ -354,6 +465,10 @@ nextjs-portal {
   backdrop-filter: blur(14px);
 }
 
+.theme-tvc .lightbox {
+  background: rgba(16, 18, 21, 0.82);
+}
+
 .lightbox-close {
   position: absolute;
   top: 18px;
@@ -362,6 +477,10 @@ nextjs-portal {
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.theme-tvc .lightbox-close {
+  color: rgba(242, 245, 248, 0.72);
 }
 
 .lightbox-panel {
@@ -373,6 +492,12 @@ nextjs-portal {
   border: 1px solid rgba(7, 7, 7, 0.08);
   background: rgba(252, 253, 255, 0.82);
   box-shadow: 0 24px 80px rgba(7, 7, 7, 0.08);
+}
+
+.theme-tvc .lightbox-panel {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(26, 30, 36, 0.9);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
 }
 
 .lightbox-copy {
@@ -417,9 +542,14 @@ nextjs-portal {
 
   .work-list {
     align-items: flex-start;
+    justify-content: flex-start;
     min-height: auto;
     padding-top: 12px;
-    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .mode-rail {
+    display: none;
   }
 
   .work-list-inner {
@@ -436,7 +566,6 @@ nextjs-portal {
   }
 
   .globe-scene {
-    transform: none;
   }
 
   .logo-frame {
