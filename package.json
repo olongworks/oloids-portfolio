@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "sync:blob:commercial": "node scripts/sync-commercial-to-blob.mjs"
   },
   "dependencies": {
+    "@vercel/blob": "^2.3.1",
     "next": "^15.2.8",
     "react": "19.0.0",
     "react-dom": "19.0.0"

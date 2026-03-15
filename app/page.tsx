@@ -1,5 +1,6 @@
 "use client";
 
+import archiveManifest from "../data/archive-manifest.json";
 import Image from "next/image";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -10,13 +11,21 @@ type Project = {
   title: string;
   category: string;
   year: string;
-  mode: "music-video" | "tvc";
+  mode: "commercial" | "education";
+  mediaItems: MediaItem[];
   aspectRatio: number;
   phi: number;
   theta: number;
   thumbnail: string;
   fallbackThumbnail: string;
 };
+
+type MediaItem = {
+  src: string;
+  type: "image" | "video";
+};
+
+type ArchiveManifest = Record<"commercial" | "education", Record<string, Record<string, string>>>;
 
 type GlobePoint = {
   project: Project;
@@ -35,27 +44,132 @@ type HintSeed = {
 
 type ProjectSeed = Omit<Project, "phi" | "theta" | "aspectRatio">;
 
+const archiveMediaManifest = archiveManifest as ArchiveManifest;
+
+const commercialArchiveSeeds = [
+  {
+    id: "01",
+    title: "RIIZE - FAME",
+    files: ["1.mp4", "2.mp4", "3.mp4", "5.mp4", "6.mp4", "7.mp4", "8.mp4"]
+  },
+  {
+    id: "02",
+    title: "ADPXIBK-I ONE BANK TVC",
+    files: ["IBK_MAIN_30s_Dir.mp4"]
+  },
+  {
+    id: "03",
+    title: "ALLDAYPROJECT-CHROM DRIFT",
+    files: ["1.mp4", "v1.mp4", "나사1.jpg", "디벨롭.mp4", "시퀀스 01_4.MP4", "아트보드 2.jpg"]
+  },
+  {
+    id: "04",
+    title: "ALLLDAYPROJECT-FAMOUS",
+    files: ["1.mp4", "2.mp4", "3.mp4", "3p 뮤비작업아카이브_1.mp4", "4.mp4", "5.mp4", "6.mp4", "7.mp4", "guide1.png"]
+  },
+  {
+    id: "05",
+    title: "CLOSE YOUR EYES-S.O.B",
+    files: ["1.mp4", "2.mp4", "3.mp4", "4.mp4"]
+  },
+  {
+    id: "06",
+    title: "CRAVITY-LEMONADE FEVER",
+    files: ["1.mp4", "2.mp4", "3.mp4", "4.mp4", "5.mp4", "6.mp4", "7.mp4", "8.mp4"]
+  },
+  {
+    id: "07",
+    title: "CRAVITY-LOGO MOTION",
+    files: ["1.mp4", "2.mp4", "3.mp4", "4.mp4", "5.png", "Guide.png"]
+  },
+  {
+    id: "08",
+    title: "DAILY DIRECTION-ROOMBADOOMBA",
+    files: ["1.mp4", "1_1.mp4", "2.mp4", "3.mp4"]
+  },
+  {
+    id: "09",
+    title: "LEESEUNGYOON-POOKZOOKTIME",
+    files: ["1.mp4", "1_1.mp4", "2.mp4", "3.mp4", "4.mp4", "5.mp4", "6.mp4"]
+  },
+  {
+    id: "10",
+    title: "NCT DREAM-BEAT IT UP",
+    files: ["1.mp4", "1_1.00_00_04_20.스틸 001.png", "1_1.mp4", "2.mp4", "3.mp4", "4.mp4", "Guide.png"]
+  },
+  {
+    id: "11",
+    title: "NCT HAECHAN-CRAZY",
+    files: ["1.mp4", "2.mp4", "3.mp4", "4.mp4", "5.mp4", "6.mp4", "이미지0.png"]
+  },
+  {
+    id: "12",
+    title: "P1HARMONY-UNIQUE",
+    files: ["p1.mp4", "p2-1.mp4", "p2-2.mp4", "p2.mp4", "p4.mp4", "p5.mp4"]
+  },
+  {
+    id: "13",
+    title: "SOMI-CLOSER",
+    files: ["1.mp4", "2.mp4", "3.mp4", "4.mp4", "5.mp4", "6.mp4", "7.mp4", "Guide.png"]
+  },
+  {
+    id: "14",
+    title: "STRAYKIDZ-DIVINE",
+    files: ["1.mp4", "2.mp4", "3.mp4", "4.mp4", "5.mp4", "6.mp4", "7.mp4", "Guide.png"]
+  },
+  {
+    id: "15",
+    title: "TUNNEX-SET BY US ONLY",
+    files: ["1.mp4", "2.mp4", "3.mp4", "4.mp4"]
+  },
+  {
+    id: "16",
+    title: "WATERBOMB-WATERFIGHT VISUALS",
+    files: ["1.mp4", "2.mp4", "3.mp4", "4.mp4", "Guide.png"]
+  },
+  {
+    id: "17",
+    title: "WHIB-ROCK THE NATION",
+    files: ["0.mp4", "1-1.mp4", "2-1.mp4", "3-1.mp4", "4-1.mp4"]
+  },
+  {
+    id: "18",
+    title: "WOODZ-HUMAN EXTINCTION",
+    files: ["1_1.mp4", "33.mp4", "[WOODZ] HUMAN EXTINCTION MV (저용량).mp4", "aaaaa.mp4"]
+  }
+] as const;
+
+const educationSeeds: ProjectSeed[] = [
+  { id: "21", letter: "u", title: "Archive U", category: "Education", year: "2025", mode: "education", mediaItems: [], thumbnail: workImagePath(2), fallbackThumbnail: createThumbnail(21, "#eef1f4", "#d4d9df", "#545d67") },
+  { id: "22", letter: "v", title: "Archive V", category: "Education", year: "2026", mode: "education", mediaItems: [], thumbnail: workImagePath(3), fallbackThumbnail: createThumbnail(22, "#f2f4f6", "#d9dde2", "#505863") },
+  { id: "23", letter: "w", title: "Archive W", category: "Education", year: "2024", mode: "education", mediaItems: [], thumbnail: workImagePath(4), fallbackThumbnail: createThumbnail(23, "#edf1f5", "#d1d7dd", "#4a535d") },
+  { id: "24", letter: "x", title: "Archive X", category: "Education", year: "2025", mode: "education", mediaItems: [], thumbnail: workImagePath(5), fallbackThumbnail: createThumbnail(24, "#f4f6f8", "#dbe0e5", "#55606a") },
+  { id: "25", letter: "y", title: "Archive Y", category: "Education", year: "2026", mode: "education", mediaItems: [], thumbnail: workImagePath(6), fallbackThumbnail: createThumbnail(25, "#f0f3f6", "#d8dde2", "#4e5861") }
+];
+
 const projectSeeds: ProjectSeed[] = [
-  { id: "01", letter: "a", title: "Archive A", category: "Brand Film", year: "2025", mode: "music-video", thumbnail: workImagePath(1), fallbackThumbnail: createThumbnail(1, "#e7eef6", "#8ea3bd", "#32465e") },
-  { id: "02", letter: "b", title: "Archive B", category: "Campaign", year: "2024", mode: "music-video", thumbnail: workImagePath(2), fallbackThumbnail: createThumbnail(2, "#e8edf5", "#a5b5ca", "#41506a") },
-  { id: "03", letter: "c", title: "Archive C", category: "Motion Identity", year: "2025", mode: "music-video", thumbnail: workImagePath(3), fallbackThumbnail: createThumbnail(3, "#eef2f7", "#95a8c2", "#2f435d") },
-  { id: "04", letter: "d", title: "Archive D", category: "Installation", year: "2023", mode: "music-video", thumbnail: workImagePath(4), fallbackThumbnail: createThumbnail(4, "#e3ebf4", "#aab8ca", "#43516a") },
-  { id: "05", letter: "e", title: "Archive E", category: "Interactive Film", year: "2026", mode: "music-video", thumbnail: workImagePath(5), fallbackThumbnail: createThumbnail(5, "#ecf1f6", "#8fa5bf", "#324962") },
-  { id: "06", letter: "f", title: "Archive F", category: "Visual System", year: "2024", mode: "music-video", thumbnail: workImagePath(6), fallbackThumbnail: createThumbnail(6, "#e6edf5", "#9fb0c6", "#40516a") },
-  { id: "07", letter: "g", title: "Archive G", category: "Spatial Visual", year: "2025", mode: "music-video", thumbnail: workImagePath(7), fallbackThumbnail: createThumbnail(7, "#eef3f8", "#92a4bc", "#31445d") },
-  { id: "08", letter: "h", title: "Archive H", category: "Direction", year: "2023", mode: "music-video", thumbnail: workImagePath(1), fallbackThumbnail: createThumbnail(8, "#e5ecf4", "#abb8ca", "#435068") },
-  { id: "09", letter: "i", title: "Archive I", category: "Short Form", year: "2026", mode: "music-video", thumbnail: workImagePath(2), fallbackThumbnail: createThumbnail(9, "#e9eef5", "#9caec4", "#364860") },
-  { id: "10", letter: "j", title: "Archive J", category: "Sound Motion", year: "2024", mode: "music-video", thumbnail: workImagePath(3), fallbackThumbnail: createThumbnail(10, "#edf2f7", "#93a6bf", "#31465d") },
-  { id: "11", letter: "k", title: "Archive K", category: "Graphic System", year: "2025", mode: "tvc", thumbnail: workImagePath(4), fallbackThumbnail: createThumbnail(11, "#20242b", "#3a4657", "#e7edf5") },
-  { id: "12", letter: "l", title: "Archive L", category: "Editorial Motion", year: "2024", mode: "tvc", thumbnail: workImagePath(5), fallbackThumbnail: createThumbnail(12, "#1d2129", "#465263", "#eef4fb") },
-  { id: "13", letter: "m", title: "Archive M", category: "Launch Visual", year: "2026", mode: "tvc", thumbnail: workImagePath(6), fallbackThumbnail: createThumbnail(13, "#21262e", "#4c596b", "#eff4fa") },
-  { id: "14", letter: "n", title: "Archive N", category: "Brand Motion", year: "2025", mode: "tvc", thumbnail: workImagePath(7), fallbackThumbnail: createThumbnail(14, "#1f242c", "#455266", "#edf3fb") },
-  { id: "15", letter: "o", title: "Archive O", category: "Film Title", year: "2023", mode: "tvc", thumbnail: workImagePath(1), fallbackThumbnail: createThumbnail(15, "#1c2027", "#3b4758", "#ecf2f9") },
-  { id: "16", letter: "p", title: "Archive P", category: "Screen Visual", year: "2025", mode: "tvc", thumbnail: workImagePath(2), fallbackThumbnail: createThumbnail(16, "#21252d", "#4a5666", "#eef4fb") },
-  { id: "17", letter: "q", title: "Archive Q", category: "Spatial Media", year: "2026", mode: "tvc", thumbnail: workImagePath(3), fallbackThumbnail: createThumbnail(17, "#1d2129", "#455162", "#e8eef6") },
-  { id: "18", letter: "r", title: "Archive R", category: "Identity Film", year: "2024", mode: "tvc", thumbnail: workImagePath(4), fallbackThumbnail: createThumbnail(18, "#20242c", "#404d5d", "#eff4fa") },
-  { id: "19", letter: "s", title: "Archive S", category: "Visual Direction", year: "2025", mode: "tvc", thumbnail: workImagePath(5), fallbackThumbnail: createThumbnail(19, "#1f232a", "#4c5869", "#eef3fb") },
-  { id: "20", letter: "t", title: "Archive T", category: "Experimental Motion", year: "2026", mode: "tvc", thumbnail: workImagePath(6), fallbackThumbnail: createThumbnail(20, "#1c2027", "#3d4857", "#ecf2f8") }
+  ...commercialArchiveSeeds.map((archive, index) => {
+    const mediaItems = archive.files.map((file) => {
+      const src = archiveFilePath("commercial", archive.title, file);
+      return {
+        src,
+        type: getMediaType(src)
+      };
+    });
+
+    return {
+      id: archive.id,
+      letter: String.fromCharCode(97 + index),
+      title: archive.title,
+      category: "Commercial",
+      year: "",
+      mode: "commercial" as const,
+      mediaItems,
+      thumbnail: mediaItems[0]?.src ?? workImagePath(index + 1),
+      fallbackThumbnail: createThumbnail(index + 1, "#20242b", "#3a4657", "#e7edf5")
+    };
+  }),
+  ...educationSeeds
 ];
 
 const AUTO_ROTATE_Y = 0.0025;
@@ -118,6 +232,36 @@ function workImagePath(seed: number) {
   return `/works/oloids-${String(imageIndex).padStart(2, "0")}.png`;
 }
 
+function archiveFilePath(section: "commercial" | "education", folder: string, file: string) {
+  const blobUrl = archiveMediaManifest[section]?.[folder]?.[file];
+
+  if (blobUrl) {
+    return blobUrl;
+  }
+
+  return `/archive/${section}/${encodeURIComponent(folder)}/${encodeURIComponent(file)}`;
+}
+
+function getMediaType(src: string): "image" | "video" {
+  return /\.(mp4|webm|ogg|mov)$/i.test(src) ? "video" : "image";
+}
+
+function splitProjectTitle(title: string) {
+  const dividerIndex = title.indexOf("-");
+
+  if (dividerIndex === -1) {
+    return {
+      head: title,
+      tail: ""
+    };
+  }
+
+  return {
+    head: title.slice(0, dividerIndex).trim(),
+    tail: title.slice(dividerIndex + 1).trim()
+  };
+}
+
 function hintPoint(seed: HintSeed, rotateX: number, rotateY: number) {
   const point = projectPoint(
     {
@@ -126,7 +270,8 @@ function hintPoint(seed: HintSeed, rotateX: number, rotateY: number) {
       title: "",
       category: "",
       year: "",
-      mode: "music-video",
+      mode: "commercial",
+      mediaItems: [],
       aspectRatio: 1,
       phi: seed.phi,
       theta: seed.theta,
@@ -189,8 +334,86 @@ function projectPoint(project: Project, rotateX: number, rotateY: number): Globe
   };
 }
 
+function ThumbnailMedia({
+  src,
+  fallbackSrc,
+  className,
+  shouldPlay
+}: {
+  src: string;
+  fallbackSrc: string;
+  className: string;
+  shouldPlay: boolean;
+}) {
+  const type = getMediaType(src);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [imageSrc, setImageSrc] = useState(src);
+
+  useEffect(() => {
+    setImageSrc(src);
+  }, [src]);
+
+  useEffect(() => {
+    if (type !== "video") {
+      return;
+    }
+
+    const video = videoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    if (shouldPlay) {
+      const playPromise = video.play();
+      playPromise?.catch(() => {});
+      return;
+    }
+
+    video.pause();
+    video.currentTime = 0;
+  }, [shouldPlay, src, type]);
+
+  if (type === "video") {
+    return (
+      <video
+        ref={videoRef}
+        className={className}
+        src={src}
+        aria-hidden="true"
+        muted
+        playsInline
+        loop={shouldPlay}
+        autoPlay={shouldPlay}
+        preload={shouldPlay ? "metadata" : "none"}
+        poster={fallbackSrc}
+      />
+    );
+  }
+
+  return (
+    <img
+      className={className}
+      src={imageSrc}
+      alt=""
+      aria-hidden="true"
+      draggable={false}
+      onError={(event) => {
+        const image = event.currentTarget;
+
+        if (image.src === fallbackSrc) {
+          return;
+        }
+
+        image.src = fallbackSrc;
+        setImageSrc(fallbackSrc);
+      }}
+    />
+  );
+}
+
 export default function Home() {
-  const [activeMode, setActiveMode] = useState<"music-video" | "tvc">("music-video");
+  const [activeMode, setActiveMode] = useState<"commercial" | "education">("commercial");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
   const [rotation, setRotation] = useState(INITIAL_ROTATION);
@@ -465,6 +688,18 @@ export default function Home() {
     setHoveredProjectId(null);
   };
 
+  const selectedProjectMedia = selectedProject
+    ? selectedProject.mediaItems.length > 0
+      ? selectedProject.mediaItems
+      : [{ src: selectedProject.thumbnail, type: getMediaType(selectedProject.thumbnail) }]
+    : [];
+
+  const selectedProjectPoster = selectedProject
+    ? selectedProject.mediaItems.find((media) => media.type === "image")?.src ?? selectedProject.fallbackThumbnail
+    : "";
+
+  const selectedTitleParts = selectedProject ? splitProjectTitle(selectedProject.title) : null;
+
   return (
     <main className={`page-shell theme-${activeMode}`}>
       <div className="ambient-wash" aria-hidden="true" />
@@ -484,7 +719,7 @@ export default function Home() {
                   onBlur={clearProjectHover}
                   onClick={() => setSelectedProject(project)}
                 >
-                  <span className="work-key">{project.letter}</span>
+                  <span className="work-key">{Number(project.id)}</span>
                   <span className="work-title">{project.title}</span>
                 </button>
               ))}
@@ -545,7 +780,13 @@ export default function Home() {
                   />
                 ))}
               </div>
-              {globePoints.map((point) => (
+              {globePoints.map((point) => {
+                const shouldPlayPreview =
+                  hoveredProjectId === point.project.id ||
+                  point.project.id === frontmostProjectId ||
+                  point.scale > 0.92;
+
+                return (
                 <button
                   key={point.project.id}
                   type="button"
@@ -577,24 +818,17 @@ export default function Home() {
                   onBlur={clearProjectHover}
                 >
               <span className="node-surface">
-                <img
+                <ThumbnailMedia
                   className="node-thumb"
                   src={point.project.thumbnail}
-                  alt=""
-                  aria-hidden="true"
-                  draggable={false}
-                  onError={(event) => {
-                    const image = event.currentTarget;
-                    if (image.src === point.project.fallbackThumbnail) {
-                      return;
-                    }
-                    image.src = point.project.fallbackThumbnail;
-                  }}
+                  fallbackSrc={point.project.fallbackThumbnail}
+                  shouldPlay={shouldPlayPreview}
                 />
                 <span className="node-vignette" aria-hidden="true" />
               </span>
             </button>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -602,17 +836,17 @@ export default function Home() {
             <div className="mode-nav mode-nav-right">
               <button
                 type="button"
-                className={`mode-item ${activeMode === "music-video" ? "is-active" : ""}`}
-                onClick={() => setActiveMode("music-video")}
+                className={`mode-item ${activeMode === "commercial" ? "is-active" : ""}`}
+                onClick={() => setActiveMode("commercial")}
               >
-                MV
+                COMMERCIAL
               </button>
               <button
                 type="button"
-                className={`mode-item ${activeMode === "tvc" ? "is-active" : ""}`}
-                onClick={() => setActiveMode("tvc")}
+                className={`mode-item ${activeMode === "education" ? "is-active" : ""}`}
+                onClick={() => setActiveMode("education")}
               >
-                TVC
+                EDUCATION
               </button>
             </div>
           </aside>
@@ -650,8 +884,34 @@ export default function Home() {
           <div className="lightbox-panel" onClick={(event) => event.stopPropagation()}>
             <div className="lightbox-copy">
               <p>{selectedProject.year}</p>
-              <h2>{selectedProject.title}</h2>
+              <h2 className="lightbox-title">
+                <span className="lightbox-title-head">{selectedTitleParts?.head}</span>
+                {selectedTitleParts?.tail ? <span className="lightbox-title-divider">-</span> : null}
+                {selectedTitleParts?.tail ? <span className="lightbox-title-tail">{selectedTitleParts.tail}</span> : null}
+              </h2>
               <span>{selectedProject.category}</span>
+            </div>
+            <div className="lightbox-media">
+              {selectedProjectMedia.map((media, index) => (
+                <div
+                  key={`${selectedProject.id}-${media.src}`}
+                  className={`lightbox-media-item ${index === 0 ? "is-primary" : ""}`}
+                >
+                  {media.type === "video" ? (
+                    <video
+                      src={media.src}
+                      poster={selectedProjectPoster}
+                      controls
+                      playsInline
+                      muted
+                      preload="metadata"
+                      className="lightbox-video"
+                    />
+                  ) : (
+                    <img src={media.src} alt="" className="lightbox-image" />
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </div>

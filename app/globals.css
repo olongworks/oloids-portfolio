@@ -6,9 +6,13 @@
   --line: rgba(7, 7, 7, 0.05);
   --node-surface: #d7dde6;
   --node-inset: rgba(255, 255, 255, 0.28);
+  --node-outline: rgba(255, 255, 255, 0.26);
+  --node-shadow: rgba(16, 22, 28, 0.08);
+  --text-raised-highlight: rgba(255, 255, 255, 0.42);
+  --text-raised-shadow: rgba(7, 7, 7, 0.14);
 }
 
-.theme-tvc {
+.theme-commercial {
   --bg: #101215;
   --fg: #f2f5f8;
   --muted: rgba(242, 245, 248, 0.48);
@@ -16,6 +20,24 @@
   --line: rgba(255, 255, 255, 0.08);
   --node-surface: #1b1f25;
   --node-inset: rgba(255, 255, 255, 0.08);
+  --node-outline: rgba(255, 255, 255, 0.08);
+  --node-shadow: rgba(0, 0, 0, 0.32);
+  --text-raised-highlight: rgba(255, 255, 255, 0.1);
+  --text-raised-shadow: rgba(0, 0, 0, 0.34);
+}
+
+.theme-education {
+  --bg: #f7f8fa;
+  --fg: #101418;
+  --muted: rgba(16, 20, 24, 0.42);
+  --panel: rgba(255, 255, 255, 0.52);
+  --line: rgba(16, 20, 24, 0.06);
+  --node-surface: #f1f3f6;
+  --node-inset: rgba(255, 255, 255, 0.34);
+  --node-outline: rgba(255, 255, 255, 0.26);
+  --node-shadow: rgba(18, 24, 30, 0.08);
+  --text-raised-highlight: rgba(255, 255, 255, 0.42);
+  --text-raised-shadow: rgba(16, 20, 24, 0.08);
 }
 
 * {
@@ -72,11 +94,26 @@ nextjs-portal {
   pointer-events: none;
 }
 
-.theme-tvc .ambient-wash {
+.ambient-wash::before,
+.ambient-wash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.theme-commercial .ambient-wash {
   background:
     radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06) 0%, transparent 32%),
     radial-gradient(circle at 18% 18%, rgba(115, 126, 145, 0.08) 0%, transparent 24%),
     radial-gradient(circle at 82% 16%, rgba(88, 99, 116, 0.1) 0%, transparent 22%);
+}
+
+.theme-education .ambient-wash {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.86) 0%, transparent 34%),
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.54) 0%, transparent 26%),
+    radial-gradient(circle at 82% 18%, rgba(235, 239, 244, 0.44) 0%, transparent 24%);
 }
 
 .stage {
@@ -100,8 +137,12 @@ nextjs-portal {
   pointer-events: none;
 }
 
-.theme-tvc .site-meta {
+.theme-commercial .site-meta {
   color: rgba(242, 245, 248, 0.56);
+}
+
+.theme-education .site-meta {
+  color: rgba(16, 20, 24, 0.54);
 }
 
 .site-meta p {
@@ -172,8 +213,19 @@ nextjs-portal {
   transition: color 180ms ease, transform 180ms ease;
 }
 
-.theme-tvc .mode-item {
+.mode-item.is-disabled,
+.mode-item:disabled {
+  opacity: 0.26;
+  transform: none;
+  cursor: default;
+}
+
+.theme-commercial .mode-item {
   color: rgba(242, 245, 248, 0.34);
+}
+
+.theme-education .mode-item {
+  color: rgba(16, 20, 24, 0.34);
 }
 
 .mode-item.is-active,
@@ -214,7 +266,7 @@ nextjs-portal {
   );
 }
 
-.theme-tvc .work-list-inner {
+.theme-commercial .work-list-inner {
   mask-image: linear-gradient(
     to bottom,
     transparent 0%,
@@ -227,6 +279,23 @@ nextjs-portal {
     transparent 0%,
     rgba(255, 255, 255, 1) 18%,
     rgba(255, 255, 255, 1) 82%,
+    transparent 100%
+  );
+}
+
+.theme-education .work-list-inner {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 1) 18%,
+    rgba(0, 0, 0, 1) 82%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 1) 18%,
+    rgba(0, 0, 0, 1) 82%,
     transparent 100%
   );
 }
@@ -247,8 +316,12 @@ nextjs-portal {
   transition: color 180ms ease, transform 180ms ease;
 }
 
-.theme-tvc .work-item {
+.theme-commercial .work-item {
   color: rgba(242, 245, 248, 0.42);
+}
+
+.theme-education .work-item {
+  color: rgba(16, 20, 24, 0.42);
 }
 
 .work-item:hover,
@@ -260,12 +333,13 @@ nextjs-portal {
 
 .work-key {
   font-size: 0.86rem;
-  text-transform: lowercase;
+  text-transform: uppercase;
 }
 
 .work-title {
   font-size: 0.94rem;
   letter-spacing: 0.01em;
+  text-transform: uppercase;
 }
 
 .stage-visual {
@@ -319,8 +393,18 @@ nextjs-portal {
   opacity: 0.45;
 }
 
-.theme-tvc .globe-guide {
+.theme-commercial .globe-guide {
   border-color: var(--line);
+}
+
+.theme-education .globe-guide {
+  border-color: var(--line);
+}
+
+.theme-education .globe-guide {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    0 0 0 1px rgba(255, 255, 255, 0.14);
 }
 
 .globe-links {
@@ -341,8 +425,16 @@ nextjs-portal {
   background: rgba(7, 7, 7, 0.05);
 }
 
-.theme-tvc .globe-link {
+.theme-commercial .globe-link {
   background: var(--line);
+}
+
+.theme-education .globe-link {
+  background: var(--line);
+}
+
+.theme-education .globe-link {
+  opacity: 0.45;
 }
 
 .globe-hints {
@@ -366,8 +458,12 @@ nextjs-portal {
   filter: blur(var(--hint-blur));
 }
 
-.theme-tvc .globe-hint {
+.theme-commercial .globe-hint {
   background: radial-gradient(circle at 40% 36%, rgba(255, 255, 255, 0.2) 0%, rgba(135, 150, 170, 0.12) 58%, rgba(135, 150, 170, 0.03) 100%);
+}
+
+.theme-education .globe-hint {
+  background: radial-gradient(circle at 40% 36%, rgba(255, 255, 255, 0.82) 0%, rgba(235, 240, 246, 0.38) 58%, rgba(220, 227, 236, 0.08) 100%);
 }
 
 .globe-node {
@@ -418,8 +514,18 @@ nextjs-portal {
   border-radius: 0;
   overflow: hidden;
   background-color: var(--node-surface);
-  box-shadow: inset 0 0 0 1px var(--node-inset);
+  box-shadow:
+    inset 0 0 0 1px var(--node-inset),
+    0 14px 34px var(--node-shadow);
   transition: transform 180ms ease;
+}
+
+.node-surface::before,
+.node-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
 .node-thumb {
@@ -435,6 +541,10 @@ nextjs-portal {
   -webkit-user-drag: none;
 }
 
+video.node-thumb {
+  object-fit: cover;
+}
+
 .node-vignette {
   position: absolute;
   inset: 0;
@@ -444,7 +554,7 @@ nextjs-portal {
     radial-gradient(circle at 74% 78%, rgba(7, 7, 7, 0.16) 0%, transparent 52%);
 }
 
-.theme-tvc .node-vignette {
+.theme-commercial .node-vignette {
   background:
     radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.18) 0%, transparent 38%),
     radial-gradient(circle at 74% 78%, rgba(0, 0, 0, 0.36) 0%, transparent 52%);
@@ -461,12 +571,13 @@ nextjs-portal {
   display: grid;
   place-items: center;
   padding: 24px;
-  background: rgba(243, 245, 248, 0.86);
+  background: rgba(10, 12, 16, 0.88);
   backdrop-filter: blur(14px);
 }
 
-.theme-tvc .lightbox {
-  background: rgba(16, 18, 21, 0.82);
+.theme-commercial .lightbox,
+.theme-education .lightbox {
+  background: rgba(10, 12, 16, 0.88);
 }
 
 .lightbox-close {
@@ -477,31 +588,35 @@ nextjs-portal {
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-.theme-tvc .lightbox-close {
   color: rgba(242, 245, 248, 0.72);
 }
 
 .lightbox-panel {
-  width: min(64vw, 720px);
-  min-height: 320px;
+  width: min(88vw, 1320px);
+  max-height: 86vh;
   display: grid;
-  place-items: center;
-  border-radius: 28px;
-  border: 1px solid rgba(7, 7, 7, 0.08);
-  background: rgba(252, 253, 255, 0.82);
-  box-shadow: 0 24px 80px rgba(7, 7, 7, 0.08);
+  grid-template-columns: minmax(180px, 220px) 1fr;
+  align-items: start;
+  gap: 22px;
+  overflow: auto;
+  padding: 22px;
+  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(6, 7, 9, 0.97);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
 }
 
-.theme-tvc .lightbox-panel {
+.theme-commercial .lightbox-panel,
+.theme-education .lightbox-panel {
   border-color: rgba(255, 255, 255, 0.08);
-  background: rgba(26, 30, 36, 0.9);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+  background: rgba(6, 7, 9, 0.97);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
 }
 
 .lightbox-copy {
-  text-align: center;
+  text-align: left;
+  position: sticky;
+  top: 0;
 }
 
 .lightbox-copy p,
@@ -512,16 +627,98 @@ nextjs-portal {
 
 .lightbox-copy p,
 .lightbox-copy span {
-  color: var(--muted);
+  color: rgba(242, 245, 248, 0.5);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 0.74rem;
+  font-size: 0.62rem;
 }
 
 .lightbox-copy h2 {
-  margin: 12px 0 16px;
-  font-size: clamp(2rem, 4vw, 3.6rem);
-  line-height: 0.92;
+  margin: 10px 0 12px;
+  font-size: clamp(1.2rem, 1.8vw, 1.8rem);
+  line-height: 1.04;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  color: #f2f5f8;
+}
+
+.lightbox-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.lightbox-title-head,
+.lightbox-title-divider,
+.lightbox-title-tail {
+  display: block;
+}
+
+.lightbox-title-head {
+  font-weight: 700;
+}
+
+.lightbox-title-divider {
+  font-weight: 600;
+  opacity: 0.92;
+}
+
+.lightbox-title-tail {
+  font-weight: 400;
+  opacity: 0.74;
+}
+
+.theme-commercial .lightbox-close,
+.theme-education .lightbox-close,
+.theme-commercial .lightbox-copy p,
+.theme-commercial .lightbox-copy span,
+.theme-education .lightbox-copy p,
+.theme-education .lightbox-copy span {
+  color: rgba(242, 245, 248, 0.54);
+}
+
+.theme-commercial .lightbox-copy h2,
+.theme-education .lightbox-copy h2 {
+  color: #f2f5f8;
+}
+
+.lightbox-media {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.lightbox-media-item {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.theme-commercial .lightbox-media-item,
+.theme-education .lightbox-media-item {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.lightbox-media-item.is-primary {
+  grid-column: 1 / -1;
+}
+
+.lightbox-video,
+.lightbox-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 72vh;
+  object-fit: contain;
+  background: #000;
+}
+
+.theme-commercial .lightbox-video,
+.theme-commercial .lightbox-image,
+.theme-education .lightbox-video,
+.theme-education .lightbox-image {
+  background: #000;
 }
 
 @media (max-width: 900px) {
@@ -613,5 +810,14 @@ nextjs-portal {
 
   .lightbox-panel {
     width: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  .lightbox-copy {
+    position: static;
+  }
+
+  .lightbox-media {
+    grid-template-columns: 1fr;
   }
 }
